@@ -39,28 +39,13 @@ class BinarySearchTree {
         }
     }
     search(value) {
-        if (this.root == null) {
-            return undefined
-        } else {
-            let currentNode = this.root
-            while (true) {
-                if (parseFloat(value) <= parseFloat(currentNode.value)) {
-                    if (parseFloat(value) == parseFloat(currentNode.value)) {
-                        let nodoHtml = document.querySelector(`#t${currentNode.value}`)
-                        nodoHtml.classList.add('marcar')
-                        return currentNode
-                    }
-                    currentNode = currentNode.left
-                } else {
-                    if (parseFloat(value) == parseFloat(currentNode.value)) {
-                        let nodoHtml = document.querySelector(`#t${currentNode.value}`)
-                        nodoHtml.classList.add('marcar')
-                        return currentNode
-                    }
-                    currentNode = currentNode.right
-                }
-            }
+        let nodoHtml = document.querySelector(`#t${value}`)
+        if(nodoHtml!=undefined){
+            nodoHtml.classList.add('marcar')
+        }else{
+            alert('El valor que esta buscando no existe, pruebe con uno que si exista')
         }
+        return
     }
     renderizar(value) {
         if (this.root == null) {
@@ -103,85 +88,54 @@ class BinarySearchTree {
         }
     }
     lista() {
-        let contador1 = 0
-        if (this.root.left != null) {
-            let currentNode = this.root.left
-            while (true) {
-                contador1++
-                let listaParaRecorrer = []
-                if (currentNode.left != null) {
-                    listaParaRecorrer.push(currentNode.left.value)
-                    if (currentNode.right != null) {
-                        listaParaRecorrer.push(currentNode.right.value)
-                    }
-                    if (contador1 == 1) {
-                        listaParaRecorrer.push(currentNode.value)
-                    }
-                    this.listaPrincipal.push(listaParaRecorrer)
-                    currentNode = currentNode.left
-                } else if (currentNode.right != null) {
-                    listaParaRecorrer.push(currentNode.right.value)
-                    if (currentNode.left != null) {
-                        listaParaRecorrer.push(currentNode.left.value)
-                    }
-                    if (contador1 == 1) {
-                        listaParaRecorrer.push(currentNode.value)
-                    }
-                    this.listaPrincipal.push(listaParaRecorrer)
-                    currentNode = currentNode.right
-                }else{
-                    return
-                }
-            }
-        }
-    }
-    lista2() {
-        let contador1 = 0
-        if (this.root.right != null) {
-            let currentNode = this.root.right
-            while (true) {
-                contador1++
-                let listaParaRecorrer = []
-                if (currentNode.right != null) {
-                    listaParaRecorrer.push(currentNode.left.value)
-                    if (currentNode.right != null) {
-                        listaParaRecorrer.push(currentNode.right.value)
-                    }
-                    if (contador1 == 1) {
-                        listaParaRecorrer.push(currentNode.value)
-                    }
-                    this.listaPrincipal.push(listaParaRecorrer)
-                    currentNode = currentNode.right
-                } else {
-                    return
-                }
-            }
-        } else {
-            return
-        }
-    }
-    normalizar() {
-        console.log(this.listaPrincipal)
-        this.listaPrincipal = this.listaPrincipal.map(item => item.reverse())
-        this.listaPrincipal = this.listaPrincipal.flat()
-        this.listaPrincipal = this.listaPrincipal.reverse()
-        this.listaPrincipal.push(this.root.value)
-        console.log(this.listaPrincipal)
-    }
-    recorrido() {
-        let longitud = this.listaPrincipal.length
-        this.#contador++
-        console.log(this.#contador)
-        console.log(longitud)
-        setTimeout(() => {
-            if (this.#contador > longitud) {
+        this.listaPrincipal = []
+        const recorrer = (nodo) => {
+            if (!nodo) {
+                console.log('regresa')
                 return
             }
-            let nodoHtml = document.querySelector(`#t${this.listaPrincipal[this.#contador - 1]}`)
-            nodoHtml.classList.add('marcar')
-            this.recorrido()
-        }, 2000);
+            recorrer(nodo.left)
+            recorrer(nodo.right)
+            this.listaPrincipal.push(nodo.value)
+            console.log(nodo.value)
+        }
 
+        recorrer(this.root)
+    }
+    recorrido() {
+        if (!this.root) {
+            return
+        }
+
+        this.lista()
+
+        let limpiar = document.querySelectorAll('.marcar')
+        limpiar.forEach(nodo => {
+            nodo.classList.remove('marcar')
+        })
+
+        this.#contador = 0
+        const longitud = this.listaPrincipal.length
+        console.log(this.listaPrincipal)
+        const mostrarSiguiente = () => {
+            if (this.#contador >= longitud) {
+                return
+            }
+
+            const valor = this.listaPrincipal[this.#contador]
+            const nodoHtml = document.querySelector(`#t${valor}`)
+
+            if (nodoHtml) {
+                nodoHtml.classList.add('marcar')
+            }
+
+            this.#contador++
+            setTimeout(() => {
+                mostrarSiguiente()
+            }, 1000);
+        }
+
+        mostrarSiguiente()
     }
 }
 
@@ -211,15 +165,12 @@ btnBuscar.addEventListener('click', (event) => {
 
 
 btnLimpiar.addEventListener('click', (event) => {
-    let limpiar = document.querySelector('.marcar')
-    if (limpiar != undefined) {
-        limpiar.classList.remove('marcar')
-    }
+    let limpiar = document.querySelectorAll('.marcar')
+    limpiar.forEach(nodo => {
+        nodo.classList.remove('marcar')
+    })
 })
 
 btnRecorrido.addEventListener('click', (event) => {
-    arbol.lista2()
-    arbol.lista()
-    arbol.normalizar()
     arbol.recorrido()
 })
