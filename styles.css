@@ -1,0 +1,210 @@
+:root {
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --node-color: #1fa65a;
+    --node-color-dark: #158a43;
+    --node-size: 64px;
+    --gap-x: 36px;
+    --gap-y: 36px;
+    --line-color: #9aa6a0;
+    --shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+
+.marcar{
+    background-color: #08351b !important;
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    min-height: 100%;
+    background: linear-gradient(180deg, #f7fbff 0%, #eef7f2 100%);
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    color: #0f172a;
+    padding: 20px;
+}
+
+.app {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--node-color-dark);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Controls (simple inputs/buttons so you can hook JS later) */
+.controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.control-card {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.control-card input {
+    width: 140px;
+}
+
+/* Canvas */
+.canvas {
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+    overflow: auto;
+}
+
+/* Tree root centers the whole structure */
+.tree {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 10px;
+}
+
+/* Each node-box holds a node and its children row */
+.node-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 var(--gap-x);
+    position: relative;
+    min-width: var(--node-size);
+}
+
+/* Node visual (simple div, easy to select/manipulate) */
+.node {
+    width: var(--node-size);
+    height: var(--node-size);
+    border-radius: 50%;
+    background: var(--node-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    position: relative;
+    z-index: 2;
+}
+
+.node:hover {
+    transform: scale(1.04);
+}
+
+.node.selected {
+    background: #ffc107;
+    color: #000;
+}
+
+/* Vertical connector from a node down to its children */
+.node-box.has-children>.node::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 6px);
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(var(--gap-y) - 6px);
+    background: var(--line-color);
+    z-index: 1;
+}
+
+/* Children row: holds child node-boxes and draws the horizontal connector */
+.children {
+    display: flex;
+    justify-content: center;
+    gap: var(--gap-x);
+    margin-top: var(--gap-y);
+    position: relative;
+    padding-top: 6px;
+    /* space for the vertical connector to meet the horizontal */
+}
+
+/* Horizontal line that connects the children under the parent */
+.children::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--line-color);
+    z-index: 1;
+}
+
+/* Small arrowheads pointing down from the horizontal line to each child */
+.children>.node-box::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--line-color);
+    z-index: 1;
+}
+
+/* If a node-box is the only child, hide the horizontal line and arrowheads */
+.children:only-child::before {
+    display: none;
+}
+
+.children:only-child>.node-box::before {
+    display: none;
+}
+
+/* Hide parent's vertical connector when it has no children */
+.node-box:not(.has-children)>.node::after {
+    display: none;
+}
+
+/* Responsive tweaks */
+@media (max-width:820px) {
+    .tree {
+        padding: 20px 6px;
+    }
+
+    .control-card input {
+        width: 110px;
+    }
+
+    :root {
+        --gap-x: 18px;
+        --gap-y: 28px;
+        --node-size: 56px;
+    }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Árbol PostOrder</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <header>
+            <h1>Visualizador de Árbol</h1>
+
+            <div class="controls" aria-hidden="false">
+                <div class="control-card" role="group" aria-label="Agregar valor">
+                    <input id="inputValor" class="form-control form-control-sm" placeholder="Etiqueta (Ej: 25)" />
+                    <button id="btnAgregar" class="btn btn-primary btn-sm">Agregar</button>
+                </div>
+
+                <div class="control-card" role="group" aria-label="Buscar / Limpiar">
+                    <input id="inputBuscar" class="form-control form-control-sm" placeholder="Buscar etiqueta" />
+                    <button id="btnBuscar" class="btn btn-success btn-sm">Buscar</button>
+                    <button id="btnLimpiar" class="btn btn-outline-secondary btn-sm">Limpiar</button>
+                </div>
+
+                <div>
+                    <button id="btnRecorrido" class="btn btn-warning btn-sm">PostOrder</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="canvas" aria-label="Lienzo del árbol">
+            <!-- Estructura del árbol con DIVs simples y atributos data-id para manipular desde JS -->
+            <div class="tree" id="treeRoot">
+                <!-- Raíz -->
+                <div class="node-box has-children" data-id="A" id="raiz">
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
